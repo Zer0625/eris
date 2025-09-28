@@ -460,6 +460,10 @@ declare namespace Eris {
     before?: string;
     limit?: number;
   }
+  interface GetPinsOptions {
+    before?: Date;
+    limit?: number;
+  }
   interface GroupRecipientOptions {
     accessToken: string;
     nick?: string;
@@ -484,9 +488,19 @@ declare namespace Eris {
   }
   interface Pinnable {
     lastPinTimestamp: number | null;
+    /** @deprecated */
     getPins(): Promise<Message[]>;
+    getPins(options?: GetPinsOptions): Promise<GetPinsResponse>;
     pinMessage(messageID: string): Promise<void>;
     unpinMessage(messageID: string): Promise<void>;
+  }
+  interface GetPinsResponse {
+    hasMore: boolean;
+    items: GetPinsResponseItem;
+  }
+  interface GetPinsResponseItem {
+    pinnedAt: number;
+    message: Message;
   }
   interface PurgeChannelOptions {
     after?: string;
@@ -2368,7 +2382,9 @@ declare namespace Eris {
     getMessages(channelID: string, limit?: number, before?: string, after?: string, around?: string): Promise<Message[]>;
     getNitroStickerPacks(): Promise<{ sticker_packs: StickerPack[] }>;
     getOAuthApplication(): Promise<OAuthApplicationInfo>;
+    /** @deprecated */
     getPins(channelID: string): Promise<Message[]>;
+    getPins(channelID: string, options?: GetPinsOptions): Promise<GetPinsResponse>;
     getPollAnswerVoters(channelID: string, messageID: string, answerID: string, options?: GetPollAnswerVotersOptions): Promise<User[]>;
     getPruneCount(guildID: string, options?: GetPruneOptions): Promise<number>;
     getRESTChannel(channelID: string): Promise<AnyChannel>;
@@ -2560,7 +2576,9 @@ declare namespace Eris {
     getMessages(options: GetMessagesOptions): Promise<Message<this>[]>;
     /** @deprecated */
     getMessages(limit?: number, before?: string, after?: string, around?: string): Promise<Message<this>[]>;
+    /** @deprecated */
     getPins(): Promise<Message<this>[]>;
+    getPins(options?: GetPinsOptions): Promise<GetPinsResponse>;
     pinMessage(messageID: string): Promise<void>;
     removeMessageReaction(messageID: string, reaction: string): Promise<void>;
     /** @deprecated */
@@ -3462,7 +3480,9 @@ declare namespace Eris {
     getArchivedThreads(type: "public", options?: GetArchivedThreadsOptions): Promise<ListedChannelThreads<PublicThreadChannel>>;
     getInvites(): Promise<Invite<"withMetadata", this>[]>;
     getJoinedPrivateArchivedThreads(options: GetArchivedThreadsOptions): Promise<ListedChannelThreads<PrivateThreadChannel>>;
+    /** @deprecated */
     getPins(): Promise<Message<this>[]>;
+    getPins(options?: GetPinsOptions): Promise<GetPinsResponse>;
     getWebhooks(): Promise<Webhook[]>;
     pinMessage(messageID: string): Promise<void>;
     unpinMessage(messageID: string): Promise<void>;
@@ -3482,7 +3502,9 @@ declare namespace Eris {
     edit(options: EditThreadChannelOptions, reason?: string): Promise<this>;
     getMember(userID: string, withMember?: boolean): Promise<ThreadMember>;
     getMembers(options?: GetThreadMembersOptions): Promise<ThreadMember[]>;
+    /** @deprecated */
     getPins(): Promise<Message<this>[]>;
+    getPins(options?: GetPinsOptions): Promise<GetPinsResponse>;
     join(userID?: string): Promise<void>;
     leave(userID?: string): Promise<void>;
     pinMessage(messageID: string): Promise<void>;
